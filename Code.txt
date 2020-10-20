@@ -1,0 +1,29 @@
+from flask import Flask, request, render_template
+import re
+import math
+
+app = Flask("__name__")
+
+q = ""
+
+@app.route("/")
+def loadPage():
+	return render_template('index.html', query="")
+
+@app.route("/", methods=['POST'])
+def cosineSimilarity():
+	
+	universalSetOfUniqueWords = []
+	matchPercentage = 0
+
+	####################################################################################################
+	
+	inputQuery = request.form['query']
+	lowercaseQuery = inputQuery.lower()
+
+	queryWordList = re.sub("[^\w]", " ",lowercaseQuery).split()			#Replace punctuation by space and split
+	# queryWordList = map(str, queryWordList)					#This was causing divide by zero error
+
+	for word in queryWordList:
+		if word not in universalSetOfUniqueWords:
+			universalSetOfUniqueWords.append(word)
